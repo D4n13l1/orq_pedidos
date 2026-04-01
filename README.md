@@ -1,4 +1,4 @@
-# orq_pedidos
+# Orquestrador de Pedidos - API NestJS
 
 API em NestJS para ingestão de pedidos via webhook, orquestrada com Redis/Bull e enriquecimento de moeda para BRL usando a API da AwesomeAPI.
 
