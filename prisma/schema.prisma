@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+enum OrderStatus {
+  RECEIVED
+  FAILED_ENRICHMENT
+}
+
+
+model Orders {
+  order_id        String @id
+  currency        String
+  idempotency_key String @unique
+  status OrderStatus @default(RECEIVED)
+
+  customer Json
+  items    Items[]
+}
+
+model Items {
+  id        String   @id @default(uuid())
+  sku       String   
+  qty       Int
+  unit_price Float
+  order_id  String
+
+  order Orders @relation(fields: [order_id], references: [order_id], onDelete: Cascade)
+
+  @@unique([sku, order_id], name: "unique_sku_per_order")
+}

@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: orq_pedidos_app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.test
+    environment:
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: file:./data/db-dev.sqlite
+    volumes:
+      - sqlite_data:/app/data
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+volumes:
+  sqlite_data:

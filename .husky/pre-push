@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+echo "Generating Prisma client..."
+npm run prisma:generate
+
+echo "Running format..."
+npm run format
+
+if ! git diff --quiet; then
+  echo "Formatting changed files. Commit formatting changes before push."
+  git status --short
+  exit 1
+fi
